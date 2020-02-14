@@ -1,11 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////
-/////////Integrantes: Gabriel Cardoso, Abner Pereira e Marcos.//////////////////
-/////////ETEC GILDO MARÇAL BEZERRA BRANDÃO, ELETRONICA 4°Z//////////////////////
-/////////Este é o programa da nossa Caixa Inteligente de Correspondência////////
-////////////////////////////////////////////////////////////////////////////////
-
-//#include <18f4520.h>
-
 #include <16f877a.h>// Definição do microcontrolador que será usado
 #use delay(clock=20000000)//Frequencia de operação (20MHz)
 #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)//Definindo RX e TX
