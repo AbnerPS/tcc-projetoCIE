@@ -1,0 +1,1629 @@
+CCS PCM C Compiler, Version 4.114, 93460303               17-jun-14 17:17
+
+               Filename: D:\Biblioteca\Documentos\Abner\ETEC\Projeto TCC\Programação Projeto CIE\ProjetoCIE.lst
+
+               ROM used: 1538 words (19%)
+                         Largest free fragment is 2048
+               RAM used: 92 (25%) at main() level
+                         97 (26%) worst case
+               Stack:    4 locations
+
+*
+0000:  MOVLW  04
+0001:  MOVWF  0A
+0002:  GOTO   40F
+0003:  NOP
+.................... //////////////////////////////////////////////////////////////////////////////// 
+.................... /////////Integrantes: Gabriel Cardoso, Abner Pereira e Marcos.////////////////// 
+.................... /////////ETEC GILDO MARÇAL BEZERRA BRANDÃO, ELETRONICA 4°Z////////////////////// 
+.................... /////////Este é o programa da nossa Caixa Inteligente de Correspondência//////// 
+.................... //////////////////////////////////////////////////////////////////////////////// 
+....................  
+.................... //#include <18f4520.h> 
+....................  
+.................... #include <16f877a.h>// Definição do microcontrolador que será usado 
+.................... //////// Standard Header file for the PIC16F877A device //////////////// 
+.................... #device PIC16F877A 
+.................... #list 
+....................  
+.................... #use delay(clock=20000000)//Frequencia de operação (20MHz) 
+*
+003C:  MOVLW  A0
+003D:  MOVWF  04
+003E:  BCF    03.7
+003F:  MOVF   00,W
+0040:  BTFSC  03.2
+0041:  GOTO   04F
+0042:  MOVLW  06
+0043:  MOVWF  78
+0044:  CLRF   77
+0045:  DECFSZ 77,F
+0046:  GOTO   045
+0047:  DECFSZ 78,F
+0048:  GOTO   044
+0049:  MOVLW  7B
+004A:  MOVWF  77
+004B:  DECFSZ 77,F
+004C:  GOTO   04B
+004D:  DECFSZ 00,F
+004E:  GOTO   042
+004F:  RETURN
+.................... #use rs232(baud=9600, xmit=PIN_C6, rcv=PIN_C7)//Definindo RX e TX 
+....................  
+.................... #fuses hs,noprotect,nobrownout,nolvp,nowdt,nocpd//Proteção e configuraçes do PIC 
+....................  
+....................  
+.................... //#Fuses HS,NOWDT,NOPUT,NOBROWNOUT,NOLVP,NOCPD,NOWRT,NODEBUG,NOPROTECT 
+....................  
+.................... #define sn1 PIN_C0//Entrada do sensor 1 
+.................... #define sn2 PIn_C1//entrada do sensor 2 
+.................... #define sn3 PIN_C2//entrada do sensor 3 
+.................... #define rst PIN_C3//RESET lcd 
+.................... #define RS PIN_E0//RS do lcd 
+.................... #define RW PIN_E1//RW do lcd 
+.................... #define EN PIN_E2//E do lcd  
+.................... #define prog PIN_C4//Tecla de programação 
+.................... #define B1 PIN_B1//Botão 1 
+.................... #define B2 PIN_B2//Botão 2 
+.................... #define B3 PIN_B3//Botão 3 
+.................... #define B4 PIN_B4//Botão 4 
+.................... #define B5 PIN_B5//Botão 5 
+.................... #define B6 PIN_B6//Botão 6 
+.................... #define B7 PIN_B7//Botão 7 
+.................... #define pwrkey PIN_C5//Liga módulo GSM 
+....................  
+.................... //#define msg int 
+....................  
+.................... char msg1[17]={" ETEC PERUS "};//Informação que irá aparecer na primeira linha do display 
+*
+0428:  MOVLW  20
+0429:  BCF    03.5
+042A:  MOVWF  20
+042B:  MOVLW  45
+042C:  MOVWF  21
+042D:  MOVLW  54
+042E:  MOVWF  22
+042F:  MOVLW  45
+0430:  MOVWF  23
+0431:  MOVLW  43
+0432:  MOVWF  24
+0433:  MOVLW  20
+0434:  MOVWF  25
+0435:  MOVLW  50
+0436:  MOVWF  26
+0437:  MOVLW  45
+0438:  MOVWF  27
+0439:  MOVLW  52
+043A:  MOVWF  28
+043B:  MOVLW  55
+043C:  MOVWF  29
+043D:  MOVLW  53
+043E:  MOVWF  2A
+043F:  MOVLW  20
+0440:  MOVWF  2B
+0441:  CLRF   2C
+.................... char msg2[17]={" MENSAGENS ="};//Informação que irá aparecer na segunda linha do display 
+0442:  MOVWF  31
+0443:  MOVLW  4D
+0444:  MOVWF  32
+0445:  MOVLW  45
+0446:  MOVWF  33
+0447:  MOVLW  4E
+0448:  MOVWF  34
+0449:  MOVLW  53
+044A:  MOVWF  35
+044B:  MOVLW  41
+044C:  MOVWF  36
+044D:  MOVLW  47
+044E:  MOVWF  37
+044F:  MOVLW  45
+0450:  MOVWF  38
+0451:  MOVLW  4E
+0452:  MOVWF  39
+0453:  MOVLW  53
+0454:  MOVWF  3A
+0455:  MOVLW  20
+0456:  MOVWF  3B
+0457:  MOVLW  3D
+0458:  MOVWF  3C
+0459:  CLRF   3D
+.................... char msg3[17]={" PROGRAMACAO"};//Informação que irá aparecer na primeira linha do display 
+045A:  MOVLW  20
+045B:  MOVWF  42
+045C:  MOVLW  50
+045D:  MOVWF  43
+045E:  MOVLW  52
+045F:  MOVWF  44
+0460:  MOVLW  4F
+0461:  MOVWF  45
+0462:  MOVLW  47
+0463:  MOVWF  46
+0464:  MOVLW  52
+0465:  MOVWF  47
+0466:  MOVLW  41
+0467:  MOVWF  48
+0468:  MOVLW  4D
+0469:  MOVWF  49
+046A:  MOVLW  41
+046B:  MOVWF  4A
+046C:  MOVLW  43
+046D:  MOVWF  4B
+046E:  MOVLW  41
+046F:  MOVWF  4C
+0470:  MOVLW  4F
+0471:  MOVWF  4D
+0472:  CLRF   4E
+.................... char msg4[17]={" TEL: "};//Informação que irá aparecer na segunda linha do display 
+0473:  MOVLW  20
+0474:  MOVWF  53
+0475:  MOVLW  54
+0476:  MOVWF  54
+0477:  MOVLW  45
+0478:  MOVWF  55
+0479:  MOVLW  4C
+047A:  MOVWF  56
+047B:  MOVLW  3A
+047C:  MOVWF  57
+047D:  MOVLW  20
+047E:  MOVWF  58
+047F:  CLRF   59
+.................... /*char Aluno[17]={"     Alunos"}; 
+.................... char Gabriel[17]={"Gabriel"}; 
+.................... char Abner[17]={"Abner"}; 
+.................... char Marcos[17]={"Marcos"}; 
+.................... char escola1[17]={"ETEC GILDO"}; 
+.................... char escola2[17]={"M. B. BRANDAO"}; 
+.................... char Curso[17]={"ELETRONICA 4°Z"};*/ 
+....................  
+.................... int indice1=0, indice2=0;//Variaveis de controle 
+.................... int carta = 0;//Variavel "carta" 
+....................  
+.................... char telefone[9];//Variável telefone  
+.................... int y,x,w = 0;//variável 
+....................  
+.................... int msg;//variável 
+....................  
+.................... void escrita(int valor)//função que executa o envio de bytes ao barramento 
+.................... { 
+.................... output_high(EN);//pino definido como EN no estado "alto" 
+*
+0050:  BSF    03.5
+0051:  BCF    09.2
+0052:  BCF    03.5
+0053:  BSF    09.2
+.................... delay_ms(1);//Aguarda 1 ms 
+0054:  MOVLW  01
+0055:  BSF    03.5
+0056:  MOVWF  20
+0057:  BCF    03.5
+0058:  CALL   03C
+.................... output_d(valor);//envia byte ao barramento de comunicação 
+0059:  BSF    03.5
+005A:  CLRF   08
+005B:  MOVF   7E,W
+005C:  BCF    03.5
+005D:  MOVWF  08
+.................... delay_ms(1);//Aguarda 1 ms 
+005E:  MOVLW  01
+005F:  BSF    03.5
+0060:  MOVWF  20
+0061:  BCF    03.5
+0062:  CALL   03C
+.................... output_low(EN);//gera borda de descida (dado armazenado na memória) 
+0063:  BSF    03.5
+0064:  BCF    09.2
+0065:  BCF    03.5
+0066:  BCF    09.2
+.................... } 
+0067:  RETURN
+....................  
+.................... void teclado()//Declara que teclado sera uma sub-rotina 
+.................... { 
+....................    output_low(RS);//Habilitando para receber instrução 
+*
+01E9:  BSF    03.5
+01EA:  BCF    09.0
+01EB:  BCF    03.5
+01EC:  BCF    09.0
+....................    escrita(0x80);//Desloca o cursor para a posição inicial da primeira linha 
+01ED:  MOVLW  80
+01EE:  MOVWF  7E
+01EF:  CALL   050
+....................    escrita(0x0f);//Display aceso com cursor intermitente 
+01F0:  MOVLW  0F
+01F1:  MOVWF  7E
+01F2:  CALL   050
+....................    output_high(RS);//Habilitando para reber dados 
+01F3:  BSF    03.5
+01F4:  BCF    09.0
+01F5:  BCF    03.5
+01F6:  BSF    09.0
+....................     
+....................      while(msg3[indice1]!=0)// 
+....................       { 
+01F7:  MOVLW  42
+01F8:  ADDWF  64,W
+01F9:  MOVWF  04
+01FA:  BCF    03.7
+01FB:  MOVF   00,F
+01FC:  BTFSC  03.2
+01FD:  GOTO   208
+....................          escrita(msg3[indice1]);// 
+01FE:  MOVLW  42
+01FF:  ADDWF  64,W
+0200:  MOVWF  04
+0201:  BCF    03.7
+0202:  MOVF   00,W
+0203:  MOVWF  75
+0204:  MOVWF  7E
+0205:  CALL   050
+....................          indice1++;//indice1= indice1+1 
+0206:  INCF   64,F
+....................       } 
+0207:  GOTO   1F7
+....................           
+....................             output_low(RS); 
+0208:  BSF    03.5
+0209:  BCF    09.0
+020A:  BCF    03.5
+020B:  BCF    09.0
+....................             escrita(0xc0);// 
+020C:  MOVLW  C0
+020D:  MOVWF  7E
+020E:  CALL   050
+....................             output_high(RS); 
+020F:  BSF    03.5
+0210:  BCF    09.0
+0211:  BCF    03.5
+0212:  BSF    09.0
+....................            
+....................                   while(msg4[indice2]!=0)// 
+....................                   { 
+0213:  MOVLW  53
+0214:  ADDWF  65,W
+0215:  MOVWF  04
+0216:  BCF    03.7
+0217:  MOVF   00,F
+0218:  BTFSC  03.2
+0219:  GOTO   224
+....................                   escrita(msg4[indice2]);// 
+021A:  MOVLW  53
+021B:  ADDWF  65,W
+021C:  MOVWF  04
+021D:  BCF    03.7
+021E:  MOVF   00,W
+021F:  MOVWF  75
+0220:  MOVWF  7E
+0221:  CALL   050
+....................                   indice2++;// indice2= indice2+1 
+0222:  INCF   65,F
+....................                    
+....................                   } 
+0223:  GOTO   213
+....................    x=0x20; 
+0224:  MOVLW  20
+0225:  MOVWF  71
+....................    output_low(RS);//Habilitando para receber instrução 
+0226:  BSF    03.5
+0227:  BCF    09.0
+0228:  BCF    03.5
+0229:  BCF    09.0
+....................    escrita(0xC6);//Declara que este "local" do display irá aparecer as funções digitadas no teclado 
+022A:  MOVLW  C6
+022B:  MOVWF  7E
+022C:  CALL   050
+....................    output_high(RS);//Habilitando para reber dados 
+022D:  BSF    03.5
+022E:  BCF    09.0
+022F:  BCF    03.5
+0230:  BSF    09.0
+....................    while (!input(prog))//Faça enquanto for verdadeiro 
+....................    { 
+0231:  BSF    74.4
+0232:  MOVF   74,W
+0233:  BSF    03.5
+0234:  MOVWF  07
+0235:  BCF    03.5
+0236:  BTFSC  07.4
+0237:  GOTO   40C
+....................    indice1=0, indice2=0; 
+0238:  CLRF   64
+0239:  CLRF   65
+....................     
+....................       delay_ms(2);//Aguarda 2 ms // 
+023A:  MOVLW  02
+023B:  BSF    03.5
+023C:  MOVWF  20
+023D:  BCF    03.5
+023E:  CALL   03C
+....................       output_high(B1);//Não há verificações na coluna 1 
+023F:  BSF    03.5
+0240:  BCF    06.1
+0241:  BCF    03.5
+0242:  BSF    06.1
+....................       output_high(B2);//Não há verificações na coluna 2 
+0243:  BSF    03.5
+0244:  BCF    06.2
+0245:  BCF    03.5
+0246:  BSF    06.2
+....................       output_low(B3);//Varredura da coluna 3 
+0247:  BSF    03.5
+0248:  BCF    06.3
+0249:  BCF    03.5
+024A:  BCF    06.3
+....................      
+....................          if(!input(B7)&&(y<9))//Se for pressionado o B7 
+024B:  BSF    03.5
+024C:  BSF    06.7
+024D:  BCF    03.5
+024E:  BTFSC  06.7
+024F:  GOTO   265
+0250:  MOVF   70,W
+0251:  SUBLW  08
+0252:  BTFSS  03.0
+0253:  GOTO   265
+....................          { 
+....................          while(!input(B7)){} 
+0254:  BSF    03.5
+0255:  BSF    06.7
+0256:  BCF    03.5
+0257:  BTFSS  06.7
+0258:  GOTO   254
+....................          x=0x33;//B7 corresponde ao numero 3 se for pressionado 
+0259:  MOVLW  33
+025A:  MOVWF  71
+....................          telefone[y]=x; 
+025B:  MOVLW  67
+025C:  ADDWF  70,W
+025D:  MOVWF  04
+025E:  BCF    03.7
+025F:  MOVF   71,W
+0260:  MOVWF  00
+....................          y++; 
+0261:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+0262:  MOVF   71,W
+0263:  MOVWF  7E
+0264:  CALL   050
+....................    } 
+....................          if(!input(B6)&&(y<9))// Se for pressionado 
+0265:  BSF    03.5
+0266:  BSF    06.6
+0267:  BCF    03.5
+0268:  BTFSC  06.6
+0269:  GOTO   27F
+026A:  MOVF   70,W
+026B:  SUBLW  08
+026C:  BTFSS  03.0
+026D:  GOTO   27F
+....................          { 
+....................          while(!input(B6)){} 
+026E:  BSF    03.5
+026F:  BSF    06.6
+0270:  BCF    03.5
+0271:  BTFSS  06.6
+0272:  GOTO   26E
+....................          x=0x36;//B6 corresponde ao numero 6 se for pressionado 
+0273:  MOVLW  36
+0274:  MOVWF  71
+....................           telefone[y]=x; 
+0275:  MOVLW  67
+0276:  ADDWF  70,W
+0277:  MOVWF  04
+0278:  BCF    03.7
+0279:  MOVF   71,W
+027A:  MOVWF  00
+....................          y++; 
+027B:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+027C:  MOVF   71,W
+027D:  MOVWF  7E
+027E:  CALL   050
+....................    }  
+....................          if(!input(B5)&&(y<9))//Se for pressionado o B5 
+027F:  BSF    03.5
+0280:  BSF    06.5
+0281:  BCF    03.5
+0282:  BTFSC  06.5
+0283:  GOTO   299
+0284:  MOVF   70,W
+0285:  SUBLW  08
+0286:  BTFSS  03.0
+0287:  GOTO   299
+....................          { 
+....................          while(!input(B5)){} 
+0288:  BSF    03.5
+0289:  BSF    06.5
+028A:  BCF    03.5
+028B:  BTFSS  06.5
+028C:  GOTO   288
+....................          x=0x39;//Se for pressionado, B5 será o numero 9 
+028D:  MOVLW  39
+028E:  MOVWF  71
+....................                    telefone[y]=x; 
+028F:  MOVLW  67
+0290:  ADDWF  70,W
+0291:  MOVWF  04
+0292:  BCF    03.7
+0293:  MOVF   71,W
+0294:  MOVWF  00
+....................          y++; 
+0295:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+0296:  MOVF   71,W
+0297:  MOVWF  7E
+0298:  CALL   050
+....................    } 
+....................          if(!input(b4))//Se for pressionado o B4 
+0299:  BSF    03.5
+029A:  BSF    06.4
+029B:  BCF    03.5
+029C:  BTFSC  06.4
+029D:  GOTO   301
+....................          { 
+....................          while(!input(B4)){}//pressionado enter 
+029E:  BSF    03.5
+029F:  BSF    06.4
+02A0:  BCF    03.5
+02A1:  BTFSS  06.4
+02A2:  GOTO   29E
+....................          { 
+....................             y=0; 
+02A3:  CLRF   70
+....................             while(y<9) 
+....................             { 
+02A4:  MOVF   70,W
+02A5:  SUBLW  08
+02A6:  BTFSS  03.0
+02A7:  GOTO   2CB
+....................             write_eeprom(y,telefone[y]); 
+02A8:  MOVLW  67
+02A9:  ADDWF  70,W
+02AA:  MOVWF  04
+02AB:  BCF    03.7
+02AC:  MOVF   00,W
+02AD:  MOVWF  75
+02AE:  MOVF   70,W
+02AF:  BSF    03.6
+02B0:  MOVWF  0D
+02B1:  MOVF   75,W
+02B2:  MOVWF  0C
+02B3:  BSF    03.5
+02B4:  BCF    0C.7
+02B5:  BSF    0C.2
+02B6:  BCF    03.5
+02B7:  BCF    03.6
+02B8:  MOVF   0B,W
+02B9:  MOVWF  77
+02BA:  BCF    0B.7
+02BB:  BSF    03.5
+02BC:  BSF    03.6
+02BD:  MOVLW  55
+02BE:  MOVWF  0D
+02BF:  MOVLW  AA
+02C0:  MOVWF  0D
+02C1:  BSF    0C.1
+02C2:  BTFSC  0C.1
+02C3:  GOTO   2C2
+02C4:  BCF    0C.2
+02C5:  MOVF   77,W
+02C6:  BCF    03.5
+02C7:  BCF    03.6
+02C8:  IORWF  0B,F
+....................             y++; 
+02C9:  INCF   70,F
+....................             } 
+02CA:  GOTO   2A4
+....................             y=0; 
+02CB:  CLRF   70
+....................             output_low(RS); 
+02CC:  BSF    03.5
+02CD:  BCF    09.0
+02CE:  BCF    03.5
+02CF:  BCF    09.0
+....................             escrita(0x01);// 
+02D0:  MOVLW  01
+02D1:  MOVWF  7E
+02D2:  CALL   050
+....................             escrita(0xc7); 
+02D3:  MOVLW  C7
+02D4:  MOVWF  7E
+02D5:  CALL   050
+....................             output_high(RS); 
+02D6:  BSF    03.5
+02D7:  BCF    09.0
+02D8:  BCF    03.5
+02D9:  BSF    09.0
+....................             escrita("O"); 
+02DA:  MOVLW  04
+02DB:  BSF    03.6
+02DC:  MOVWF  0D
+02DD:  MOVLW  00
+02DE:  MOVWF  0F
+02DF:  BCF    03.6
+02E0:  CALL   1AF
+....................             escrita("K"); 
+02E1:  MOVLW  05
+02E2:  BSF    03.6
+02E3:  MOVWF  0D
+02E4:  MOVLW  00
+02E5:  MOVWF  0F
+02E6:  BCF    03.6
+02E7:  CALL   1AF
+....................             while(!input(prog)) 
+....................             { 
+02E8:  BSF    74.4
+02E9:  MOVF   74,W
+02EA:  BSF    03.5
+02EB:  MOVWF  07
+02EC:  BCF    03.5
+02ED:  BTFSS  07.4
+....................             } 
+02EE:  GOTO   2E8
+....................          } 
+....................           
+....................           
+....................          while(telefone[y]!=0) 
+....................       { 
+02EF:  MOVLW  67
+02F0:  ADDWF  70,W
+02F1:  MOVWF  04
+02F2:  BCF    03.7
+02F3:  MOVF   00,F
+02F4:  BTFSC  03.2
+02F5:  GOTO   300
+....................          escrita(telefone[y]); 
+02F6:  MOVLW  67
+02F7:  ADDWF  70,W
+02F8:  MOVWF  04
+02F9:  BCF    03.7
+02FA:  MOVF   00,W
+02FB:  MOVWF  75
+02FC:  MOVWF  7E
+02FD:  CALL   050
+....................          y++; 
+02FE:  INCF   70,F
+....................       } 
+02FF:  GOTO   2EF
+....................           
+....................          y=0; 
+0300:  CLRF   70
+....................          } 
+....................          delay_ms(2);// 
+0301:  MOVLW  02
+0302:  BSF    03.5
+0303:  MOVWF  20
+0304:  BCF    03.5
+0305:  CALL   03C
+....................        
+....................       //////////////////////////////////////////// 
+....................        
+....................       output_high(B1);//Não há verificações na coluna 1 
+0306:  BSF    03.5
+0307:  BCF    06.1
+0308:  BCF    03.5
+0309:  BSF    06.1
+....................       output_low(B2);//Varredura da coluna 2 
+030A:  BSF    03.5
+030B:  BCF    06.2
+030C:  BCF    03.5
+030D:  BCF    06.2
+....................       output_high(B3);//Não há verificações na coluna 3 
+030E:  BSF    03.5
+030F:  BCF    06.3
+0310:  BCF    03.5
+0311:  BSF    06.3
+....................        
+....................       if(!input(b7)&&(y<9))//Se for pressionado o B7 
+0312:  BSF    03.5
+0313:  BSF    06.7
+0314:  BCF    03.5
+0315:  BTFSC  06.7
+0316:  GOTO   32C
+0317:  MOVF   70,W
+0318:  SUBLW  08
+0319:  BTFSS  03.0
+031A:  GOTO   32C
+....................          { 
+....................          while(!input(B7)){} 
+031B:  BSF    03.5
+031C:  BSF    06.7
+031D:  BCF    03.5
+031E:  BTFSS  06.7
+031F:  GOTO   31B
+....................          x=0x32;//Se for pressionado, B7 será o numero 2 
+0320:  MOVLW  32
+0321:  MOVWF  71
+....................                    telefone[y]=x; 
+0322:  MOVLW  67
+0323:  ADDWF  70,W
+0324:  MOVWF  04
+0325:  BCF    03.7
+0326:  MOVF   71,W
+0327:  MOVWF  00
+....................          y++; 
+0328:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+0329:  MOVF   71,W
+032A:  MOVWF  7E
+032B:  CALL   050
+....................    } 
+....................       if(!input(b6)&&(y<9))//Se for pressionado o B6 
+032C:  BSF    03.5
+032D:  BSF    06.6
+032E:  BCF    03.5
+032F:  BTFSC  06.6
+0330:  GOTO   346
+0331:  MOVF   70,W
+0332:  SUBLW  08
+0333:  BTFSS  03.0
+0334:  GOTO   346
+....................          { 
+....................          while(!input(B6)){} 
+0335:  BSF    03.5
+0336:  BSF    06.6
+0337:  BCF    03.5
+0338:  BTFSS  06.6
+0339:  GOTO   335
+....................          x=0x35;//Se for pressionado, B6 será o numero5 
+033A:  MOVLW  35
+033B:  MOVWF  71
+....................                    telefone[y]=x; 
+033C:  MOVLW  67
+033D:  ADDWF  70,W
+033E:  MOVWF  04
+033F:  BCF    03.7
+0340:  MOVF   71,W
+0341:  MOVWF  00
+....................          y++; 
+0342:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+0343:  MOVF   71,W
+0344:  MOVWF  7E
+0345:  CALL   050
+....................    } 
+....................       if(!input(b5)&&(y<9))//Se for pressionado o B5 
+0346:  BSF    03.5
+0347:  BSF    06.5
+0348:  BCF    03.5
+0349:  BTFSC  06.5
+034A:  GOTO   360
+034B:  MOVF   70,W
+034C:  SUBLW  08
+034D:  BTFSS  03.0
+034E:  GOTO   360
+....................          { 
+....................          while(!input(B5)){} 
+034F:  BSF    03.5
+0350:  BSF    06.5
+0351:  BCF    03.5
+0352:  BTFSS  06.5
+0353:  GOTO   34F
+....................          x=0x38;//Se for pressionado, B5 será o numero 8 
+0354:  MOVLW  38
+0355:  MOVWF  71
+....................                    telefone[y]=x; 
+0356:  MOVLW  67
+0357:  ADDWF  70,W
+0358:  MOVWF  04
+0359:  BCF    03.7
+035A:  MOVF   71,W
+035B:  MOVWF  00
+....................          y++; 
+035C:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+035D:  MOVF   71,W
+035E:  MOVWF  7E
+035F:  CALL   050
+....................    } 
+....................       if(!input(b4)&&(y<9))//Se for pressionado o B4 
+0360:  BSF    03.5
+0361:  BSF    06.4
+0362:  BCF    03.5
+0363:  BTFSC  06.4
+0364:  GOTO   37A
+0365:  MOVF   70,W
+0366:  SUBLW  08
+0367:  BTFSS  03.0
+0368:  GOTO   37A
+....................          { 
+....................          while(!input(B4)){} 
+0369:  BSF    03.5
+036A:  BSF    06.4
+036B:  BCF    03.5
+036C:  BTFSS  06.4
+036D:  GOTO   369
+....................          x=0x30;//Se for pressionado, B4 será o numero 0 
+036E:  MOVLW  30
+036F:  MOVWF  71
+....................                    telefone[y]=x; 
+0370:  MOVLW  67
+0371:  ADDWF  70,W
+0372:  MOVWF  04
+0373:  BCF    03.7
+0374:  MOVF   71,W
+0375:  MOVWF  00
+....................          y++; 
+0376:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+0377:  MOVF   71,W
+0378:  MOVWF  7E
+0379:  CALL   050
+....................    } 
+....................       delay_ms(2);//Aguarda 2 ms 
+037A:  MOVLW  02
+037B:  BSF    03.5
+037C:  MOVWF  20
+037D:  BCF    03.5
+037E:  CALL   03C
+....................        
+....................       ////////////////////////////////////////////////// 
+....................        
+....................       output_low(B1);//Varredura da coluna 2 
+037F:  BSF    03.5
+0380:  BCF    06.1
+0381:  BCF    03.5
+0382:  BCF    06.1
+....................       output_high(B2);//Não há verificações na coluna 2 
+0383:  BSF    03.5
+0384:  BCF    06.2
+0385:  BCF    03.5
+0386:  BSF    06.2
+....................       output_high(B3);//Não há verificações na coluna 3 
+0387:  BSF    03.5
+0388:  BCF    06.3
+0389:  BCF    03.5
+038A:  BSF    06.3
+....................        
+....................       if(!input(b7)&&(y<9))//Se for pressionado o B7 
+038B:  BSF    03.5
+038C:  BSF    06.7
+038D:  BCF    03.5
+038E:  BTFSC  06.7
+038F:  GOTO   3A5
+0390:  MOVF   70,W
+0391:  SUBLW  08
+0392:  BTFSS  03.0
+0393:  GOTO   3A5
+....................          { 
+....................          while(!input(B7)){} 
+0394:  BSF    03.5
+0395:  BSF    06.7
+0396:  BCF    03.5
+0397:  BTFSS  06.7
+0398:  GOTO   394
+....................         x=0x31;//Se for pressionado, B7 será o numero 1 
+0399:  MOVLW  31
+039A:  MOVWF  71
+....................                   telefone[y]=x; 
+039B:  MOVLW  67
+039C:  ADDWF  70,W
+039D:  MOVWF  04
+039E:  BCF    03.7
+039F:  MOVF   71,W
+03A0:  MOVWF  00
+....................          y++; 
+03A1:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+03A2:  MOVF   71,W
+03A3:  MOVWF  7E
+03A4:  CALL   050
+....................    } 
+....................       if(!input(b6)&&(y<9))//Se for pressionado o B6 
+03A5:  BSF    03.5
+03A6:  BSF    06.6
+03A7:  BCF    03.5
+03A8:  BTFSC  06.6
+03A9:  GOTO   3BF
+03AA:  MOVF   70,W
+03AB:  SUBLW  08
+03AC:  BTFSS  03.0
+03AD:  GOTO   3BF
+....................          { 
+....................          while(!input(B6)){} 
+03AE:  BSF    03.5
+03AF:  BSF    06.6
+03B0:  BCF    03.5
+03B1:  BTFSS  06.6
+03B2:  GOTO   3AE
+....................          x=0x34;//Se for pressionado, B6 será o numero 4 
+03B3:  MOVLW  34
+03B4:  MOVWF  71
+....................                    telefone[y]=x; 
+03B5:  MOVLW  67
+03B6:  ADDWF  70,W
+03B7:  MOVWF  04
+03B8:  BCF    03.7
+03B9:  MOVF   71,W
+03BA:  MOVWF  00
+....................          y++; 
+03BB:  INCF   70,F
+....................          escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+03BC:  MOVF   71,W
+03BD:  MOVWF  7E
+03BE:  CALL   050
+....................    } 
+....................       if(!input(b5)&&(y<9))//Se for pressionado o B5 
+03BF:  BSF    03.5
+03C0:  BSF    06.5
+03C1:  BCF    03.5
+03C2:  BTFSC  06.5
+03C3:  GOTO   3D9
+03C4:  MOVF   70,W
+03C5:  SUBLW  08
+03C6:  BTFSS  03.0
+03C7:  GOTO   3D9
+....................          { 
+....................          while(!input(B5)){} 
+03C8:  BSF    03.5
+03C9:  BSF    06.5
+03CA:  BCF    03.5
+03CB:  BTFSS  06.5
+03CC:  GOTO   3C8
+....................          x=0x37;//Se for pressionado, B5 será o numero 7 
+03CD:  MOVLW  37
+03CE:  MOVWF  71
+....................                    telefone[y]=x; 
+03CF:  MOVLW  67
+03D0:  ADDWF  70,W
+03D1:  MOVWF  04
+03D2:  BCF    03.7
+03D3:  MOVF   71,W
+03D4:  MOVWF  00
+....................          y++; 
+03D5:  INCF   70,F
+....................       escrita(x);//tudo que for digitado no teclado, este comando será enviado para o display 
+03D6:  MOVF   71,W
+03D7:  MOVWF  7E
+03D8:  CALL   050
+....................    } 
+....................       if(!input(b4)&&(y<10)&&(y>0))//Se for pressionado o Backspace 
+03D9:  BSF    03.5
+03DA:  BSF    06.4
+03DB:  BCF    03.5
+03DC:  BTFSC  06.4
+03DD:  GOTO   40B
+03DE:  MOVF   70,W
+03DF:  SUBLW  09
+03E0:  BTFSS  03.0
+03E1:  GOTO   40B
+03E2:  MOVF   70,F
+03E3:  BTFSC  03.2
+03E4:  GOTO   40B
+....................          { 
+....................          while(!input(B4)){} 
+03E5:  BSF    03.5
+03E6:  BSF    06.4
+03E7:  BCF    03.5
+03E8:  BTFSS  06.4
+03E9:  GOTO   3E5
+....................             output_low(RS);// 
+03EA:  BSF    03.5
+03EB:  BCF    09.0
+03EC:  BCF    03.5
+03ED:  BCF    09.0
+....................             escrita(0x04);// 
+03EE:  MOVLW  04
+03EF:  MOVWF  7E
+03F0:  CALL   050
+....................             escrita(0x0f);// 
+03F1:  MOVLW  0F
+03F2:  MOVWF  7E
+03F3:  CALL   050
+....................             output_high(RS);// 
+03F4:  BSF    03.5
+03F5:  BCF    09.0
+03F6:  BCF    03.5
+03F7:  BSF    09.0
+....................             escrita(" "); 
+03F8:  MOVLW  06
+03F9:  BSF    03.6
+03FA:  MOVWF  0D
+03FB:  MOVLW  00
+03FC:  MOVWF  0F
+03FD:  BCF    03.6
+03FE:  CALL   1AF
+....................             y--; 
+03FF:  DECF   70,F
+....................             output_low(RS);// 
+0400:  BSF    03.5
+0401:  BCF    09.0
+0402:  BCF    03.5
+0403:  BCF    09.0
+....................             escrita(0x06);// 
+0404:  MOVLW  06
+0405:  MOVWF  7E
+0406:  CALL   050
+....................            // escrita(0x0c);// 
+....................             output_high(RS);// 
+0407:  BSF    03.5
+0408:  BCF    09.0
+0409:  BCF    03.5
+040A:  BSF    09.0
+....................    } 
+....................    } 
+040B:  GOTO   231
+.................... } 
+040C:  BCF    0A.3
+040D:  BCF    0A.4
+040E:  GOTO   5FA (RETURN)
+.................... void inicializa()//Inicialização do display 
+.................... { 
+.................... output_low(RS);//Habilitando para receber instrução  
+*
+0068:  BSF    03.5
+0069:  BCF    09.0
+006A:  BCF    03.5
+006B:  BCF    09.0
+.................... escrita(0x38);//Configura display para 2 linhas 5x7 8 bits 
+006C:  MOVLW  38
+006D:  MOVWF  7E
+006E:  CALL   050
+.................... escrita(0x06);//Escreve deslocando o cursor para a direita 
+006F:  MOVLW  06
+0070:  MOVWF  7E
+0071:  CALL   050
+.................... escrita(0x0c);//Display aceso sem cursor 
+0072:  MOVLW  0C
+0073:  MOVWF  7E
+0074:  CALL   050
+.................... escrita(0x01);//Limpa display 
+0075:  MOVLW  01
+0076:  MOVWF  7E
+0077:  CALL   050
+.................... output_high(RS);//Habilita para mandar dados 
+0078:  BSF    03.5
+0079:  BCF    09.0
+007A:  BCF    03.5
+007B:  BSF    09.0
+.................... delay_ms(3);//Aguarda 3 ms 
+007C:  MOVLW  03
+007D:  BSF    03.5
+007E:  MOVWF  20
+007F:  BCF    03.5
+0080:  CALL   03C
+.................... } 
+0081:  RETURN
+....................  
+.................... void reset()//Função de reset da contagem no LCD 
+....................  { 
+....................       msg=0;// 
+*
+0182:  CLRF   73
+....................       write_eeprom(20,msg); 
+0183:  MOVLW  14
+0184:  BSF    03.6
+0185:  MOVWF  0D
+0186:  MOVF   73,W
+0187:  MOVWF  0C
+0188:  BSF    03.5
+0189:  BCF    0C.7
+018A:  BSF    0C.2
+018B:  BCF    03.5
+018C:  BCF    03.6
+018D:  MOVF   0B,W
+018E:  MOVWF  77
+018F:  BCF    0B.7
+0190:  BSF    03.5
+0191:  BSF    03.6
+0192:  MOVLW  55
+0193:  MOVWF  0D
+0194:  MOVLW  AA
+0195:  MOVWF  0D
+0196:  BSF    0C.1
+0197:  BTFSC  0C.1
+0198:  GOTO   197
+0199:  BCF    0C.2
+019A:  MOVF   77,W
+019B:  BCF    03.5
+019C:  BCF    03.6
+019D:  IORWF  0B,F
+....................       output_low(RS);//configura o LCD para receber uma instrução RS=0 
+019E:  BSF    03.5
+019F:  BCF    09.0
+01A0:  BCF    03.5
+01A1:  BCF    09.0
+....................       escrita(0xcd);// 
+01A2:  MOVLW  CD
+01A3:  MOVWF  7E
+01A4:  CALL   050
+....................       output_high(RS);//configura o LCD para receber um dado RS=1 
+01A5:  BSF    03.5
+01A6:  BCF    09.0
+01A7:  BCF    03.5
+01A8:  BSF    09.0
+....................       escrita(0x20); 
+01A9:  MOVLW  20
+01AA:  MOVWF  7E
+01AB:  CALL   050
+....................    } 
+01AC:  BCF    0A.3
+01AD:  BCF    0A.4
+01AE:  GOTO   5D6 (RETURN)
+....................    void valor_lcd(long int w) 
+.................... { 
+*
+0082:  MOVLW  30
+0083:  MOVWF  7B
+0084:  MOVWF  7C
+.................... int dezena=0x30,unidade=0x30; 
+....................         while(w>=10) 
+....................          { 
+0085:  MOVF   76,F
+0086:  BTFSS  03.2
+0087:  GOTO   08C
+0088:  MOVF   75,W
+0089:  SUBLW  09
+008A:  BTFSC  03.0
+008B:  GOTO   094
+....................          w=w-10; 
+008C:  MOVLW  0A
+008D:  SUBWF  75,F
+008E:  MOVLW  00
+008F:  BTFSS  03.0
+0090:  MOVLW  01
+0091:  SUBWF  76,F
+....................          dezena++; 
+0092:  INCF   7B,F
+....................          } 
+0093:  GOTO   085
+....................             while(w>=1) 
+....................             { 
+0094:  MOVF   76,F
+0095:  BTFSS  03.2
+0096:  GOTO   09B
+0097:  MOVF   75,W
+0098:  SUBLW  00
+0099:  BTFSC  03.0
+009A:  GOTO   0A3
+....................             w=w-1; 
+009B:  MOVLW  01
+009C:  SUBWF  75,F
+009D:  MOVLW  00
+009E:  BTFSS  03.0
+009F:  MOVLW  01
+00A0:  SUBWF  76,F
+....................             unidade++; 
+00A1:  INCF   7C,F
+....................             } 
+00A2:  GOTO   094
+.................... output_low(RS);//configura o LCD para receber uma instrução RS=0 
+00A3:  BSF    03.5
+00A4:  BCF    09.0
+00A5:  BCF    03.5
+00A6:  BCF    09.0
+.................... escrita(0xcd);//Posição que a contagem aparecerá no diplay 
+00A7:  MOVLW  CD
+00A8:  MOVWF  7E
+00A9:  CALL   050
+.................... output_high(RS);//configura o LCD para receber um dado RS=1 
+00AA:  BSF    03.5
+00AB:  BCF    09.0
+00AC:  BCF    03.5
+00AD:  BSF    09.0
+.................... escrita(dezena);// 
+00AE:  MOVF   7B,W
+00AF:  MOVWF  7E
+00B0:  CALL   050
+.................... escrita(unidade);// 
+00B1:  MOVF   7C,W
+00B2:  MOVWF  7E
+00B3:  CALL   050
+.................... } 
+00B4:  RETURN
+....................    
+.................... void main() 
+.................... { 
+*
+040F:  CLRF   04
+0410:  BCF    03.7
+0411:  MOVLW  1F
+0412:  ANDWF  03,F
+0413:  MOVLW  81
+0414:  BSF    03.5
+0415:  MOVWF  19
+0416:  MOVLW  A6
+0417:  MOVWF  18
+0418:  MOVLW  90
+0419:  BCF    03.5
+041A:  MOVWF  18
+041B:  CLRF   64
+041C:  CLRF   65
+041D:  CLRF   66
+041E:  CLRF   72
+041F:  MOVLW  FF
+0420:  MOVWF  74
+0421:  BSF    03.5
+0422:  BSF    1F.0
+0423:  BSF    1F.1
+0424:  BSF    1F.2
+0425:  BCF    1F.3
+0426:  MOVLW  07
+0427:  MOVWF  1C
+....................    SETUP_CCP1(CCP_OFF); 
+*
+0480:  BSF    74.2
+0481:  MOVF   74,W
+0482:  BSF    03.5
+0483:  MOVWF  07
+0484:  BCF    03.5
+0485:  CLRF   17
+....................    PORT_b_PULLUPS(true);//Ativa pullup interno do portB 
+0486:  BSF    03.5
+0487:  BCF    01.7
+....................    output_low(RW);//Manda nível lógico baixo neste pino do display, pois ele não será utilizado 
+0488:  BCF    09.1
+0489:  BCF    03.5
+048A:  BCF    09.1
+....................    inicializa();//Chamada de função inicializa 
+048B:  CALL   068
+....................    y=0; 
+048C:  CLRF   70
+....................   
+....................             output_low(pwrkey); 
+048D:  BCF    74.5
+048E:  MOVF   74,W
+048F:  BSF    03.5
+0490:  MOVWF  07
+0491:  BCF    03.5
+0492:  BCF    07.5
+....................             delay_ms(2500); 
+0493:  MOVLW  0A
+0494:  MOVWF  75
+0495:  MOVLW  FA
+0496:  BSF    03.5
+0497:  MOVWF  20
+0498:  BCF    03.5
+0499:  CALL   03C
+049A:  DECFSZ 75,F
+049B:  GOTO   495
+....................             output_high(pwrkey); 
+049C:  BCF    74.5
+049D:  MOVF   74,W
+049E:  BSF    03.5
+049F:  MOVWF  07
+04A0:  BCF    03.5
+04A1:  BSF    07.5
+....................             msg=read_eeprom(20); 
+04A2:  MOVLW  14
+04A3:  BSF    03.6
+04A4:  MOVWF  0D
+04A5:  BSF    03.5
+04A6:  BCF    0C.7
+04A7:  BSF    0C.0
+04A8:  BCF    03.5
+04A9:  MOVF   0C,W
+04AA:  MOVWF  73
+....................             valor_lcd(msg); 
+04AB:  CLRF   76
+04AC:  MOVF   73,W
+04AD:  MOVWF  75
+04AE:  BCF    03.6
+04AF:  CALL   082
+....................             while(y<9) 
+....................             { 
+04B0:  MOVF   70,W
+04B1:  SUBLW  08
+04B2:  BTFSS  03.0
+04B3:  GOTO   4C4
+....................            telefone[y]=read_eeprom(y); 
+04B4:  MOVLW  67
+04B5:  ADDWF  70,W
+04B6:  MOVWF  04
+04B7:  BCF    03.7
+04B8:  MOVF   70,W
+04B9:  BSF    03.6
+04BA:  MOVWF  0D
+04BB:  BSF    03.5
+04BC:  BCF    0C.7
+04BD:  BSF    0C.0
+04BE:  BCF    03.5
+04BF:  MOVF   0C,W
+04C0:  MOVWF  00
+....................             y++; 
+04C1:  INCF   70,F
+....................             } 
+04C2:  BCF    03.6
+04C3:  GOTO   4B0
+....................             y=0; 
+04C4:  CLRF   70
+.................... while (true)// 
+.................... { 
+....................             output_low(RS); 
+04C5:  BSF    03.5
+04C6:  BCF    09.0
+04C7:  BCF    03.5
+04C8:  BCF    09.0
+....................             escrita(0x80);// 
+04C9:  MOVLW  80
+04CA:  MOVWF  7E
+04CB:  CALL   050
+....................             output_high(RS); 
+04CC:  BSF    03.5
+04CD:  BCF    09.0
+04CE:  BCF    03.5
+04CF:  BSF    09.0
+....................    while(msg1[indice1]!=0)// 
+....................       { 
+04D0:  MOVLW  20
+04D1:  ADDWF  64,W
+04D2:  MOVWF  04
+04D3:  BCF    03.7
+04D4:  MOVF   00,F
+04D5:  BTFSC  03.2
+04D6:  GOTO   4E1
+....................          escrita(msg1[indice1]);// 
+04D7:  MOVLW  20
+04D8:  ADDWF  64,W
+04D9:  MOVWF  04
+04DA:  BCF    03.7
+04DB:  MOVF   00,W
+04DC:  MOVWF  75
+04DD:  MOVWF  7E
+04DE:  CALL   050
+....................          indice1++;//indice1= indice1+1 
+04DF:  INCF   64,F
+....................       } 
+04E0:  GOTO   4D0
+....................           
+....................             output_low(RS); 
+04E1:  BSF    03.5
+04E2:  BCF    09.0
+04E3:  BCF    03.5
+04E4:  BCF    09.0
+....................             escrita(0xc0);// 
+04E5:  MOVLW  C0
+04E6:  MOVWF  7E
+04E7:  CALL   050
+....................             output_high(RS); 
+04E8:  BSF    03.5
+04E9:  BCF    09.0
+04EA:  BCF    03.5
+04EB:  BSF    09.0
+....................            
+....................                   while(msg2[indice2]!=0)// 
+....................                   { 
+04EC:  MOVLW  31
+04ED:  ADDWF  65,W
+04EE:  MOVWF  04
+04EF:  BCF    03.7
+04F0:  MOVF   00,F
+04F1:  BTFSC  03.2
+04F2:  GOTO   4FD
+....................                   escrita(msg2[indice2]);// 
+04F3:  MOVLW  31
+04F4:  ADDWF  65,W
+04F5:  MOVWF  04
+04F6:  BCF    03.7
+04F7:  MOVF   00,W
+04F8:  MOVWF  75
+04F9:  MOVWF  7E
+04FA:  CALL   050
+....................                   indice2++;// indice2= indice2+1 
+04FB:  INCF   65,F
+....................                    
+....................                   }    
+04FC:  GOTO   4EC
+....................  
+....................             output_low(RS); 
+04FD:  BSF    03.5
+04FE:  BCF    09.0
+04FF:  BCF    03.5
+0500:  BCF    09.0
+....................             escrita(0xce);// 
+0501:  MOVLW  CE
+0502:  MOVWF  7E
+0503:  CALL   050
+....................             output_high(RS); 
+0504:  BSF    03.5
+0505:  BCF    09.0
+0506:  BCF    03.5
+0507:  BSF    09.0
+....................              
+....................             //valor_lcd(msg); 
+....................  
+....................    if (((input(sn1))||(input(sn2))||(input(sn3)))&&(carta == 0))//Se for acionado alguns desses sensores 
+0508:  BSF    74.0
+0509:  MOVF   74,W
+050A:  BSF    03.5
+050B:  MOVWF  07
+050C:  BCF    03.5
+050D:  BTFSC  07.0
+050E:  GOTO   51D
+050F:  BSF    74.1
+0510:  MOVF   74,W
+0511:  BSF    03.5
+0512:  MOVWF  07
+0513:  BCF    03.5
+0514:  BTFSC  07.1
+0515:  GOTO   51D
+0516:  BSF    74.2
+0517:  MOVF   74,W
+0518:  BSF    03.5
+0519:  MOVWF  07
+051A:  BCF    03.5
+051B:  BTFSS  07.2
+051C:  GOTO   5CE
+051D:  MOVF   66,F
+051E:  BTFSS  03.2
+051F:  GOTO   5CE
+....................    { 
+....................  //     while((input(sn1))||(input(sn2))||(input(sn3)))//só ira acionar o sensor depois 
+....................    // que a carta passar pelo mesmo. 
+....................  //  { 
+....................       while (carta == 0) 
+....................    { 
+0520:  MOVF   66,F
+0521:  BTFSS  03.2
+0522:  GOTO   52B
+....................  
+....................    delay_ms(200);// Aguarda 2 segundos 
+0523:  MOVLW  C8
+0524:  BSF    03.5
+0525:  MOVWF  20
+0526:  BCF    03.5
+0527:  CALL   03C
+....................    carta = 1;//A variável carta é verdadeira e os comando do display e do GSM serão enviados 
+0528:  MOVLW  01
+0529:  MOVWF  66
+....................    } 
+052A:  GOTO   520
+....................   // } 
+....................   msg++;// Incrementa mais 1 (+1) no valor do display, conforme for acionado os sensores 
+052B:  INCF   73,F
+....................    write_eeprom(20,msg);//Grava o número de telefone na EEPROM interna do MCU 
+052C:  MOVLW  14
+052D:  BSF    03.6
+052E:  MOVWF  0D
+052F:  MOVF   73,W
+0530:  MOVWF  0C
+0531:  BSF    03.5
+0532:  BCF    0C.7
+0533:  BSF    0C.2
+0534:  BCF    03.5
+0535:  BCF    03.6
+0536:  MOVF   0B,W
+0537:  MOVWF  77
+0538:  BCF    0B.7
+0539:  BSF    03.5
+053A:  BSF    03.6
+053B:  MOVLW  55
+053C:  MOVWF  0D
+053D:  MOVLW  AA
+053E:  MOVWF  0D
+053F:  BSF    0C.1
+0540:  BTFSC  0C.1
+0541:  GOTO   540
+0542:  BCF    0C.2
+0543:  MOVF   77,W
+0544:  BCF    03.5
+0545:  BCF    03.6
+0546:  IORWF  0B,F
+....................    valor_lcd(msg);// escreve valor no lcd 
+0547:  CLRF   76
+0548:  MOVF   73,W
+0549:  MOVWF  75
+054A:  CALL   082
+....................     
+....................     
+....................    delay_ms(250);//Aguarda 250 ms 
+054B:  MOVLW  FA
+054C:  BSF    03.5
+054D:  MOVWF  20
+054E:  BCF    03.5
+054F:  CALL   03C
+....................    printf("AT\r\n");//Comando AT informa ao modem que será enviado um comando 
+0550:  MOVLW  07
+0551:  BSF    03.6
+0552:  MOVWF  0D
+0553:  MOVLW  00
+0554:  MOVWF  0F
+0555:  BCF    03.6
+0556:  CALL   0B5
+....................    delay_ms(200);//Aguarda 20ms para o próximo comando 
+0557:  MOVLW  C8
+0558:  BSF    03.5
+0559:  MOVWF  20
+055A:  BCF    03.5
+055B:  CALL   03C
+....................    printf("AT+CMGF=1\r\n");//Função para mandar sms 
+055C:  MOVLW  0A
+055D:  BSF    03.6
+055E:  MOVWF  0D
+055F:  MOVLW  00
+0560:  MOVWF  0F
+0561:  BCF    03.6
+0562:  CALL   0B5
+....................    delay_ms(200);//Aguarda 20ms para o próximo comando 
+0563:  MOVLW  C8
+0564:  BSF    03.5
+0565:  MOVWF  20
+0566:  BCF    03.5
+0567:  CALL   03C
+....................     
+....................     printf("AT+CMGS=\"%c%c%c%c%c%c%c%c%c\"\r\n",telefone[0], 
+....................     telefone[1],telefone[2],telefone[3],telefone[4], 
+....................     telefone[5],telefone[6],telefone[7],telefone[8]);  //Inserção do numero de telefone 
+0568:  MOVLW  10
+0569:  BSF    03.6
+056A:  MOVWF  0D
+056B:  MOVLW  00
+056C:  MOVWF  0F
+056D:  BCF    03.0
+056E:  MOVLW  09
+056F:  MOVWF  75
+0570:  BCF    03.6
+0571:  CALL   0F1
+0572:  MOVF   67,W
+0573:  BTFSS  0C.4
+0574:  GOTO   573
+0575:  MOVWF  19
+0576:  MOVF   68,W
+0577:  BTFSS  0C.4
+0578:  GOTO   577
+0579:  MOVWF  19
+057A:  MOVF   69,W
+057B:  BTFSS  0C.4
+057C:  GOTO   57B
+057D:  MOVWF  19
+057E:  MOVF   6A,W
+057F:  BTFSS  0C.4
+0580:  GOTO   57F
+0581:  MOVWF  19
+0582:  MOVF   6B,W
+0583:  BTFSS  0C.4
+0584:  GOTO   583
+0585:  MOVWF  19
+0586:  MOVF   6C,W
+0587:  BTFSS  0C.4
+0588:  GOTO   587
+0589:  MOVWF  19
+058A:  MOVF   6D,W
+058B:  BTFSS  0C.4
+058C:  GOTO   58B
+058D:  MOVWF  19
+058E:  MOVF   6E,W
+058F:  BTFSS  0C.4
+0590:  GOTO   58F
+0591:  MOVWF  19
+0592:  MOVF   6F,W
+0593:  BTFSS  0C.4
+0594:  GOTO   593
+0595:  MOVWF  19
+0596:  MOVLW  22
+0597:  BTFSS  0C.4
+0598:  GOTO   597
+0599:  MOVWF  19
+059A:  MOVLW  0D
+059B:  BTFSS  0C.4
+059C:  GOTO   59B
+059D:  MOVWF  19
+059E:  MOVLW  0A
+059F:  BTFSS  0C.4
+05A0:  GOTO   59F
+05A1:  MOVWF  19
+....................    delay_ms(200);//Aguarda 20ms para o próximo comando 
+05A2:  MOVLW  C8
+05A3:  BSF    03.5
+05A4:  MOVWF  20
+05A5:  BCF    03.5
+05A6:  CALL   03C
+....................    printf("PROJETO CIE:Voce possui %u nova(s) correspondencia(s)\r\n",msg);//Mensagem a ser enviada 
+05A7:  MOVLW  20
+05A8:  BSF    03.6
+05A9:  MOVWF  0D
+05AA:  MOVLW  00
+05AB:  MOVWF  0F
+05AC:  BCF    03.0
+05AD:  MOVLW  18
+05AE:  MOVWF  75
+05AF:  BCF    03.6
+05B0:  CALL   0F1
+05B1:  MOVF   73,W
+05B2:  MOVWF  75
+05B3:  MOVLW  1B
+05B4:  MOVWF  76
+05B5:  GOTO   148
+05B6:  MOVLW  2D
+05B7:  BSF    03.6
+05B8:  MOVWF  0D
+05B9:  MOVLW  00
+05BA:  MOVWF  0F
+05BB:  BCF    03.0
+05BC:  MOVLW  1D
+05BD:  MOVWF  75
+05BE:  BCF    03.6
+05BF:  CALL   0F1
+....................    delay_ms(250);//Aguarda 25ms para o próximo comando 
+05C0:  MOVLW  FA
+05C1:  BSF    03.5
+05C2:  MOVWF  20
+05C3:  BCF    03.5
+05C4:  CALL   03C
+....................    putc(0x1a); //Comando de envio de mensagem 
+05C5:  MOVLW  1A
+05C6:  BTFSS  0C.4
+05C7:  GOTO   5C6
+05C8:  MOVWF  19
+....................    delay_ms(250); 
+05C9:  MOVLW  FA
+05CA:  BSF    03.5
+05CB:  MOVWF  20
+05CC:  BCF    03.5
+05CD:  CALL   03C
+....................   } 
+....................     
+....................    if(input(rst))  
+05CE:  BSF    74.3
+05CF:  MOVF   74,W
+05D0:  BSF    03.5
+05D1:  MOVWF  07
+05D2:  BCF    03.5
+05D3:  BTFSS  07.3
+05D4:  GOTO   5DA
+....................    { 
+....................    reset();//Reset da contagem no LCD 
+05D5:  GOTO   182
+....................          valor_lcd(msg); 
+05D6:  CLRF   76
+05D7:  MOVF   73,W
+05D8:  MOVWF  75
+05D9:  CALL   082
+....................    } 
+....................    if ((!input(sn2))&&(!input(sn3))&&(!input(sn1))) carta = 0;// Se não estiver acionado os sensores 
+05DA:  BSF    74.1
+05DB:  MOVF   74,W
+05DC:  BSF    03.5
+05DD:  MOVWF  07
+05DE:  BCF    03.5
+05DF:  BTFSC  07.1
+05E0:  GOTO   5EF
+05E1:  BSF    74.2
+05E2:  MOVF   74,W
+05E3:  BSF    03.5
+05E4:  MOVWF  07
+05E5:  BCF    03.5
+05E6:  BTFSC  07.2
+05E7:  GOTO   5EF
+05E8:  BSF    74.0
+05E9:  MOVF   74,W
+05EA:  BSF    03.5
+05EB:  MOVWF  07
+05EC:  BCF    03.5
+05ED:  BTFSS  07.0
+05EE:  CLRF   66
+....................    //a variável carta voltará a ser falsa e irá aguardar a entrada dos sensores novamente. 
+....................     
+....................    while (!input(prog))//Faça enquanto atecla PROG for Acionada 
+....................    { 
+05EF:  BSF    74.4
+05F0:  MOVF   74,W
+05F1:  BSF    03.5
+05F2:  MOVWF  07
+05F3:  BCF    03.5
+05F4:  BTFSC  07.4
+05F5:  GOTO   600
+....................    inicializa();//Inicializa display para o modo teclado 
+05F6:  CALL   068
+....................    indice1=0, indice2=0;//Zera os valores dos indices 
+05F7:  CLRF   64
+05F8:  CLRF   65
+....................    teclado();//Vai para a função teclado 
+05F9:  GOTO   1E9
+....................    inicializa();//Volta para a mensagem inicial do display 
+05FA:  CALL   068
+....................    valor_lcd(msg);//E guarda a contagem que estava anterior da quantidade das mensagens 
+05FB:  CLRF   76
+05FC:  MOVF   73,W
+05FD:  MOVWF  75
+05FE:  CALL   082
+....................     
+....................    } 
+05FF:  GOTO   5EF
+.................... } 
+0600:  GOTO   4C5
+.................... } 
+0601:  SLEEP
+
+Configuration Fuses:
+   Word  1: 3F32   HS NOWDT PUT NOBROWNOUT NOLVP NOCPD NOWRT NODEBUG NOPROTECT
